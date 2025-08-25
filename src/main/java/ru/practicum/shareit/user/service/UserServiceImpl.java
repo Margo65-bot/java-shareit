@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.ConditionsNotMetException;
+import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.UserEmailConflictException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserDtoMapper;
@@ -21,7 +22,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getAll() {
         log.info("Запрос на получение списка пользователей");
-        return userStorage.getAll().stream()
+        return userStorage.findAll().stream()
                 .map(UserDtoMapper::mapToDto)
                 .toList();
     }
@@ -29,7 +30,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getById(long id) {
         log.info("Запрос на получение пользователя с id {}", id);
-        return UserDtoMapper.mapToDto(userStorage.getById(id));
+        return UserDtoMapper.mapToDto(userStorage.findById(id).orElseThrow(() -> new NotFoundException("Пользователь с id " + id + " не найден")));
     }
 
     @Override
@@ -48,11 +49,11 @@ public class UserServiceImpl implements UserService {
             throw new ConditionsNotMetException("Электронная почта не может быть пустой");
         }
 
-        if (!userStorage.getByEmail(email).isEmpty()) {
+        if (!userStorage.findByEmailContainingIgnoreCase(email).isEmpty()) {
             throw new UserEmailConflictException("Пользователь с электронной почтой " + email + " уже существует");
         }
 
-        User user = userStorage.create(UserDtoMapper.mapToModel(userDto));
+        User user = userStorage.save((UserDtoMapper.mapToModel(userDto)));
         return UserDtoMapper.mapToDto(user);
     }
 
@@ -60,25 +61,25 @@ public class UserServiceImpl implements UserService {
     public UserDto update(long id, UserDto userDto) {
         log.info("Запрос на обновление пользователя с данными: {}", userDto);
 
-        User user = userStorage.getById(id);
+        UserDto userFind = getById(id);
 
         if (userDto.getName() == null || userDto.getName().isBlank()) {
-            userDto.setName(user.getName());
+            userDto.setName(userFind.getName());
         }
 
         String email = userDto.getEmail();
 
         if (email == null || email.isBlank()) {
-            userDto.setEmail(user.getEmail());
+            userDto.setEmail(userFind.getEmail());
         }
 
-        if (!userStorage.getByEmail(email).isEmpty()) {
+        if (!userStorage.findByEmailContainingIgnoreCase(email).isEmpty()) {
             throw new UserEmailConflictException("Пользователь с электронной почтой " + email + " уже существует");
         }
 
         userDto.setId(id);
 
-        user = userStorage.update(UserDtoMapper.mapToModel(userDto));
+        User user = userStorage.save(UserDtoMapper.mapToModel(userDto));
         return UserDtoMapper.mapToDto(user);
     }
 }
