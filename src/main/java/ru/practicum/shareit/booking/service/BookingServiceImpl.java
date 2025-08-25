@@ -24,7 +24,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class BookingServiceImpl implements BookingService{
+public class BookingServiceImpl implements BookingService {
     private final BookingStorage bookingStorage;
     private final ItemStorage itemStorage;
     private final UserStorage userStorage;
