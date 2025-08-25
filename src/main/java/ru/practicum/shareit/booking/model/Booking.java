@@ -23,10 +23,12 @@ import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 
-@Getter @Setter
+@Getter
+@Setter
 @ToString(exclude = {"user", "item"})
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Entity
 @Table(name = "bookings")
