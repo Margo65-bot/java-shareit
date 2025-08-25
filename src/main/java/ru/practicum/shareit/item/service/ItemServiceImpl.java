@@ -54,7 +54,7 @@ public class ItemServiceImpl implements ItemService {
         UserDto user = userService.getById(userId);
 
         if ((itemDto.getName() == null || itemDto.getName().isBlank()) ||
-        (itemDto.getDescription() == null || itemDto.getDescription().isBlank())) {
+                (itemDto.getDescription() == null || itemDto.getDescription().isBlank())) {
             throw new ConditionsNotMetException("Название и описание вещи не должно быть пустым");
         }
 
