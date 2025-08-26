@@ -30,6 +30,7 @@ public class ItemDto {
     @Data
     @AllArgsConstructor
     public static class BookingInfo {
+        private Long itemId;
         private LocalDateTime start;
         private LocalDateTime end;
     }

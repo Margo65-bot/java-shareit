@@ -144,22 +144,24 @@ public interface BookingStorage extends JpaRepository<Booking, Long> {
 
     //    запросы для вывода BookingInfo
     @Query("select new ru.practicum.shareit.item.dto.ItemDto$BookingInfo(" +
-            "b.start, b.end) " +
+            "b.item.id, b.start, b.end) " +
             "from Booking b " +
-            "where b.item.id = :id " +
+            "join b.item " +
+            "where b.item.id in :itemIds " +
             "and b.status = 'APPROVED' " +
             "and b.end < current_timestamp " +
             "order by b.end desc " +
             "limit 1")
-    Optional<ItemDto.BookingInfo> findLastBookingByItemId(@Param("id") long id);
+    List<ItemDto.BookingInfo> findAllLastBookingByItemIds(@Param("itemIds") List<Long> itemIds);
 
     @Query("select new ru.practicum.shareit.item.dto.ItemDto$BookingInfo(" +
-            "b.start, b.end) " +
+            "b.item.id, b.start, b.end) " +
             "from Booking b " +
-            "where b.item.id = :id " +
+            "join b.item " +
+            "where b.item.id in :itemIds " +
             "and b.status = 'APPROVED' " +
             "and b.start > current_timestamp " +
             "order by b.start asc " +
             "limit 1")
-    Optional<ItemDto.BookingInfo> findNextBookingByItemId(@Param("id") long id);
+    List<ItemDto.BookingInfo> findAllNextBookingByItemIds(@Param("itemIds") List<Long> itemIds);
 }

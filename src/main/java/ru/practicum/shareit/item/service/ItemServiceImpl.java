@@ -21,7 +21,9 @@ import ru.practicum.shareit.user.storage.UserStorage;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -37,7 +39,9 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto getById(long id) {
         log.info("Запрос на получение вещи с id {}", id);
         ItemDto commentDto = ItemDtoMapper.mapToDto(getItemOrThrowNotFound(id));
-        commentDto.setComments(getListOfCommentDto(id));
+        commentDto.setComments(commentStorage.findAllByItemId(id).stream()
+                .map(CommentDtoMapper::mapToDto)
+                .toList());
         return commentDto;
     }
 
@@ -105,13 +109,17 @@ public class ItemServiceImpl implements ItemService {
         if (!userStorage.existsById(id)) {
             throw new NotFoundException("Пользователь с id " + id + " не найден");
         }
-        return itemStorage.findAllByUserId(id).stream()
-                .map(i -> {
-                    ItemDto infoDto = ItemDtoMapper.mapToDto(i);
-                    setBookingInfo(infoDto, i.getId());
-                    infoDto.setComments(getListOfCommentDto(i.getId()));
-                    return infoDto;
-                }).toList();
+        List<ItemDto> items = itemStorage.findAllByUserId(id).stream()
+                .map(ItemDtoMapper::mapToDto)
+                .toList();
+        Map<Long, List<CommentDto>> commentsMap = commentStorage.findAllByItemOwnerId(id).stream()
+                .map(CommentDtoMapper::mapToDto)
+                .collect(Collectors.groupingBy(CommentDto::getItemId));
+
+
+        items = setBookingInfo(items);
+        items.forEach(itemDto -> itemDto.setComments(commentsMap.getOrDefault(itemDto.getId(), List.of())));
+        return items;
     }
 
     @Override
@@ -146,21 +154,32 @@ public class ItemServiceImpl implements ItemService {
         return commentRes;
     }
 
-    private void setBookingInfo(ItemDto infoDto, long id) {
-        Optional<ItemDto.BookingInfo> lastBooking = bookingStorage.findLastBookingByItemId(id);
-        Optional<ItemDto.BookingInfo> nextBooking = bookingStorage.findNextBookingByItemId(id);
-        lastBooking.ifPresent(infoDto::setLastBooking);
-        nextBooking.ifPresent(infoDto::setNextBooking);
+    private List<ItemDto> setBookingInfo(List<ItemDto> itemDtoList) {
+        List<Long> itemIds = itemDtoList.stream()
+                .map(ItemDto::getId)
+                .toList();
+
+        Map<Long, ItemDto.BookingInfo> lastBookingInfoMap = bookingStorage.findAllLastBookingByItemIds(itemIds).stream()
+                .collect(Collectors.toMap(ItemDto.BookingInfo::getItemId, Function.identity()));
+        Map<Long, ItemDto.BookingInfo> nextBookingInfoMap = bookingStorage.findAllNextBookingByItemIds(itemIds).stream()
+                .collect(Collectors.toMap(ItemDto.BookingInfo::getItemId, Function.identity()));
+
+        return itemDtoList.stream()
+                .peek(itemDto -> {
+                    long itemId = itemDto.getId();
+                    ItemDto.BookingInfo lastBooking = lastBookingInfoMap.get(itemId);
+                    if (lastBooking != null) {
+                        itemDto.setLastBooking(lastBooking);
+                    }
+                    ItemDto.BookingInfo nextBooking = nextBookingInfoMap.get(itemId);
+                    if (nextBooking != null) {
+                        itemDto.setNextBooking(nextBooking);
+                    }
+                })
+                .toList();
     }
 
     private Item getItemOrThrowNotFound(long id) {
         return itemStorage.findById(id).orElseThrow(() -> new NotFoundException("Вещь с id " + id + " не найдена"));
-    }
-
-    private List<CommentDto> getListOfCommentDto(long id) {
-        List<Comment> comments = commentStorage.findAllByItemIdWithUserAndItem(id);
-        return comments.stream()
-                .map(CommentDtoMapper::mapToDto)
-                .toList();
     }
 }

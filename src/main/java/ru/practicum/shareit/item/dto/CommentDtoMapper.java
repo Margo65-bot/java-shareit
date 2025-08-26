@@ -9,6 +9,7 @@ public class CommentDtoMapper {
                 .text(comment.getText())
                 .created(comment.getCreated())
                 .authorName(comment.getUser().getName())
+                .itemId(comment.getItem().getId())
                 .build();
     }
 
