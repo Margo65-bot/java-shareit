@@ -26,7 +26,6 @@ public interface BookingStorage extends JpaRepository<Booking, Long> {
             "and b.end < current_timestamp")
     boolean existsApprovedPastBooking(@Param("itemId") long itemId, @Param("userId") long userId);
 
-    //    запросы для бронирований пользователя
     @Query("select b " +
             "from Booking as b " +
             "join fetch b.user " +
@@ -81,7 +80,6 @@ public interface BookingStorage extends JpaRepository<Booking, Long> {
             "order by b.start desc")
     List<Booking> findRejectedByUserIdOrderByStartDesc(@Param("id") long id);
 
-    //    запросы для бронирований владельца вещей
     @Query("select b " +
             "from Booking as b " +
             "join fetch b.user " +
@@ -142,7 +140,6 @@ public interface BookingStorage extends JpaRepository<Booking, Long> {
             "order by b.start desc")
     List<Booking> findRejectedByItemOwnerIdOrderByStartDesc(@Param("id") long id);
 
-    //    запросы для вывода BookingInfo
     @Query("select new ru.practicum.shareit.item.dto.ItemDto$BookingInfo(" +
             "b.item.id, b.start, b.end) " +
             "from Booking b " +
