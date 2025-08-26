@@ -18,6 +18,8 @@ import ru.practicum.shareit.booking.service.BookingService;
 
 import java.util.List;
 
+import static ru.practicum.shareit.constant.HttpHeaders.USER_ID_HEADER;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/bookings")
@@ -25,31 +27,31 @@ public class BookingController {
     private final BookingService bookingService;
 
     @GetMapping("/{id}")
-    public BookingResponseDto getByIdForOwnerOrBooker(@RequestHeader("X-Sharer-User-Id") long userId,
+    public BookingResponseDto getByIdForOwnerOrBooker(@RequestHeader(USER_ID_HEADER) long userId,
                                                       @PathVariable(name = "id") long bookingId) {
         return bookingService.getByIdForOwnerOrBooker(userId, bookingId);
     }
 
     @GetMapping
-    public List<BookingResponseDto> getAllForBooker(@RequestHeader("X-Sharer-User-Id") long userId,
+    public List<BookingResponseDto> getAllForBooker(@RequestHeader(USER_ID_HEADER) long userId,
                                                     @RequestParam(required = false, defaultValue = "ALL") BookingStateQueryParam state) {
         return bookingService.getAllForBooker(userId, state);
     }
 
     @GetMapping("/owner")
-    public List<BookingResponseDto> getAllForOwner(@RequestHeader("X-Sharer-User-Id") long userId,
+    public List<BookingResponseDto> getAllForOwner(@RequestHeader(USER_ID_HEADER) long userId,
                                                    @RequestParam(required = false, defaultValue = "ALL") BookingStateQueryParam state) {
         return bookingService.getAllForOwner(userId, state);
     }
 
     @PostMapping
-    public BookingResponseDto create(@RequestHeader("X-Sharer-User-Id") long userId,
+    public BookingResponseDto create(@RequestHeader(USER_ID_HEADER) long userId,
                                      @RequestBody @Valid BookingCreateDto createDto) {
         return bookingService.create(userId, createDto);
     }
 
     @PatchMapping("/{id}")
-    public BookingResponseDto updateStateByOwner(@RequestHeader("X-Sharer-User-Id") long userId,
+    public BookingResponseDto updateStateByOwner(@RequestHeader(USER_ID_HEADER) long userId,
                                                  @PathVariable(name = "id") long bookingId,
                                                  @RequestParam boolean approved) {
         return bookingService.updateStateByOwner(userId, bookingId, approved);

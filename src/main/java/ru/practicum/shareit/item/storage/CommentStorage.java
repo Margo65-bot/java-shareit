@@ -8,10 +8,12 @@ import ru.practicum.shareit.item.model.Comment;
 import java.util.List;
 
 public interface CommentStorage extends JpaRepository<Comment, Long> {
+    List<Comment> findAllByItemId(long id);
+
     @Query("select c " +
             "from Comment as c " +
-            "join fetch c.user " +
-            "join fetch c.item " +
-            "where c.item.id = :id")
-    List<Comment> findAllByItemIdWithUserAndItem(@Param("id") long id);
+            "join fetch c.item as i " +
+            "join i.user as u " +
+            "where u.id = :id")
+    List<Comment> findAllByItemOwnerId(@Param("id") long id);
 }

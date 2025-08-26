@@ -18,6 +18,8 @@ import ru.practicum.shareit.item.service.ItemService;
 
 import java.util.List;
 
+import static ru.practicum.shareit.constant.HttpHeaders.USER_ID_HEADER;
+
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor
@@ -35,17 +37,17 @@ public class ItemController {
     }
 
     @PostMapping
-    public ItemDto create(@RequestHeader("X-Sharer-User-Id") long userId, @Valid @RequestBody ItemDto itemDto) {
+    public ItemDto create(@RequestHeader(USER_ID_HEADER) long userId, @Valid @RequestBody ItemDto itemDto) {
         return itemService.create(userId, itemDto);
     }
 
     @PatchMapping("/{id}")
-    public ItemDto update(@PathVariable(name = "id") long itemId, @RequestHeader("X-Sharer-User-Id") long userId, @Valid @RequestBody ItemDto itemDto) {
+    public ItemDto update(@PathVariable(name = "id") long itemId, @RequestHeader(USER_ID_HEADER) long userId, @Valid @RequestBody ItemDto itemDto) {
         return itemService.update(itemId, userId, itemDto);
     }
 
     @GetMapping
-    public List<ItemDto> getItems(@RequestHeader("X-Sharer-User-Id") Long id) {
+    public List<ItemDto> getItems(@RequestHeader(USER_ID_HEADER) Long id) {
         return itemService.getItemsByUserId(id);
     }
 
@@ -55,7 +57,7 @@ public class ItemController {
     }
 
     @PostMapping("/{id}/comment")
-    public CommentDto createComment(@RequestHeader("X-Sharer-User-Id") long userId,
+    public CommentDto createComment(@RequestHeader(USER_ID_HEADER) long userId,
                                     @PathVariable(name = "id") long itemId,
                                     @Valid @RequestBody CommentDto commentDto) {
         return itemService.createComment(userId, itemId, commentDto);
