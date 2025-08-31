@@ -1,7 +1,9 @@
-package ru.practicum.shareit.item.model;
+package ru.practicum.shareit.booking.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,34 +18,41 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@ToString(exclude = "user")
+@ToString(exclude = {"user", "item"})
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "items")
-public class Item {
-
+@Table(name = "bookings")
+public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
 
-    @Column(name = "name", nullable = false, length = 200)
-    private String name;
+    @Column(name = "start_date", nullable = false)
+    private LocalDateTime start;
 
-    @Column(name = "description", nullable = false, length = 300)
-    private String description;
+    @Column(name = "end_date", nullable = false)
+    private LocalDateTime end;
 
-    @Column(name = "available", nullable = false)
-    private Boolean available;
+    @Column(name = "state", nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private BookingState status;
 
     @JoinColumn(name = "user_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+
+    @JoinColumn(name = "item_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Item item;
 }
