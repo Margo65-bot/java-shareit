@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.service.ItemService;
 
 import java.util.List;
+
+import static ru.practicum.shareit.constant.HttpHeaders.USER_ID_HEADER;
 
 @RestController
 @RequestMapping("/items")
@@ -34,25 +37,29 @@ public class ItemController {
     }
 
     @PostMapping
-    public ItemDto create(@RequestHeader("X-Sharer-User-Id") long userId, @Valid @RequestBody ItemDto itemDto) {
+    public ItemDto create(@RequestHeader(USER_ID_HEADER) long userId, @Valid @RequestBody ItemDto itemDto) {
         return itemService.create(userId, itemDto);
     }
 
     @PatchMapping("/{id}")
-    public ItemDto update(@PathVariable(name = "id") long itemId, @RequestHeader("X-Sharer-User-Id") long userId, @Valid @RequestBody ItemDto itemDto) {
+    public ItemDto update(@PathVariable(name = "id") long itemId, @RequestHeader(USER_ID_HEADER) long userId, @Valid @RequestBody ItemDto itemDto) {
         return itemService.update(itemId, userId, itemDto);
     }
 
     @GetMapping
-    public List<ItemDto> getItems(@RequestHeader("X-Sharer-User-Id") Long id) {
-        if (id == null) {
-            return itemService.getAll();
-        }
+    public List<ItemDto> getItems(@RequestHeader(USER_ID_HEADER) Long id) {
         return itemService.getItemsByUserId(id);
     }
 
     @GetMapping("/search")
-    public List<ItemDto> searchItems(@RequestParam(name = "text", required = false) String query) {
+    public List<ItemDto> searchItems(@RequestParam(name = "text", required = false, defaultValue = "") String query) {
         return itemService.searchItems(query);
+    }
+
+    @PostMapping("/{id}/comment")
+    public CommentDto createComment(@RequestHeader(USER_ID_HEADER) long userId,
+                                    @PathVariable(name = "id") long itemId,
+                                    @Valid @RequestBody CommentDto commentDto) {
+        return itemService.createComment(userId, itemId, commentDto);
     }
 }
