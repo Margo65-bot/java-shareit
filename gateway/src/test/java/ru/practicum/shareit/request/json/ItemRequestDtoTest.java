@@ -54,24 +54,24 @@ public class ItemRequestDtoTest {
     @Test
     void shouldDeserializeItemRequestDto() throws Exception {
         String json = """
-            {
-                "id": 1,
-                "description": "Нужны инструменты для ремонта",
-                "created": "2024-01-15T10:30:45",
-                "items": [
-                    {
-                        "id": 1,
-                        "name": "Дрель",
-                        "userId": 123
-                    },
-                    {
-                        "id": 2,
-                        "name": "Молоток",
-                        "userId": 123
-                    }
-                ]
-            }
-            """;
+                {
+                    "id": 1,
+                    "description": "Нужны инструменты для ремонта",
+                    "created": "2024-01-15T10:30:45",
+                    "items": [
+                        {
+                            "id": 1,
+                            "name": "Дрель",
+                            "userId": 123
+                        },
+                        {
+                            "id": 2,
+                            "name": "Молоток",
+                            "userId": 123
+                        }
+                    ]
+                }
+                """;
 
         ItemRequestDto dto = objectMapper.readValue(json, ItemRequestDto.class);
 
@@ -86,12 +86,12 @@ public class ItemRequestDtoTest {
     @Test
     void shouldDeserializeWithoutItems() throws Exception {
         String json = """
-            {
-                "id": 1,
-                "description": "Простой запрос",
-                "created": "2024-01-15T10:30:45"
-            }
-            """;
+                {
+                    "id": 1,
+                    "description": "Простой запрос",
+                    "created": "2024-01-15T10:30:45"
+                }
+                """;
 
         ItemRequestDto dto = objectMapper.readValue(json, ItemRequestDto.class);
 
