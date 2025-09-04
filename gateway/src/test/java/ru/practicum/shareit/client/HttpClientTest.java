@@ -28,7 +28,8 @@ public class HttpClientTest {
         private String message;
         private Integer value;
 
-        public TestResponse() {}
+        public TestResponse() {
+        }
 
         public TestResponse(String message, Integer value) {
             this.message = message;
@@ -42,7 +43,8 @@ public class HttpClientTest {
         private String data;
         private Integer number;
 
-        public TestRequest() {}
+        public TestRequest() {
+        }
 
         public TestRequest(String data, Integer number) {
             this.data = data;
