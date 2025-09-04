@@ -39,13 +39,10 @@ public class BookingCreateDtoTest {
     void shouldDeserializeBookingCreateDto() throws Exception {
         // Given
         String json = """
-                {
-                    "id": 1,
+                {"id": 1,
                     "start": "2024-01-15T10:00:00",
                     "end": "2024-01-16T10:00:00",
-                    "itemId": 123
-                }
-                """;
+                    "itemId": 123}""";
 
         BookingCreateDto dto = objectMapper.readValue(json, BookingCreateDto.class);
 
@@ -58,12 +55,10 @@ public class BookingCreateDtoTest {
     @Test
     void shouldHandleNullValues() throws Exception {
         String json = """
-                {
-                    "start": "2024-01-15T10:00:00",
+                    {"start": "2024-01-15T10:00:00",
                     "end": "2024-01-16T10:00:00",
-                    "itemId": 123
-                }
-                """;
+                    "itemId": 123}
+                    """;
 
         BookingCreateDto dto = objectMapper.readValue(json, BookingCreateDto.class);
 
