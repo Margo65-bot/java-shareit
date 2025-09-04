@@ -63,33 +63,32 @@ public class ItemDtoTest {
 
     @Test
     void shouldDeserializeItemDto() throws Exception {
-        String json = """
-                { "id": 123,
-                    "name": "Дрель",
-                    "description": "Мощная дрель с ударным механизмом",
-                    "available": true,
-                    "requestId": 456,
-                    "lastBooking": {
-                        "itemId": 1,
-                        "start": "2024-01-15T10:00:00",
-                        "end": "2024-01-16T10:00:00"
-                    },
-                    "nextBooking": {
-                        "itemId": 2,
-                        "start": "2024-01-17T10:00:00",
-                        "end": "2024-01-18T10:00:00"
-                    },
-                    "comments": [
-                        {
-                            "id": 1,
-                            "text": "Хорошая вещь",
-                            "authorName": "Петр",
-                            "created": "2024-01-14T15:30:00",
-                            "itemId": 123
-                        }
-                    ]
-                }
-                """;
+        String json = "{" +
+                "\"id\": 123," +
+                "\"name\": \"Дрель\"," +
+                "\"description\": \"Мощная дрель с ударным механизмом\"," +
+                "\"available\": true," +
+                "\"requestId\": 456," +
+                "\"lastBooking\": {" +
+                "\"itemId\": 1," +
+                "\"start\": \"2024-01-15T10:00:00\"," +
+                "\"end\": \"2024-01-16T10:00:00\"" +
+                "}," +
+                "\"nextBooking\": {" +
+                "\"itemId\": 2," +
+                "\"start\": \"2024-01-17T10:00:00\"," +
+                "\"end\": \"2024-01-18T10:00:00\"" +
+                "}," +
+                "\"comments\": [" +
+                "{" +
+                "\"id\": 1," +
+                "\"text\": \"Хорошая вещь\"," +
+                "\"authorName\": \"Петр\"," +
+                "\"created\": \"2024-01-14T15:30:00\"," +
+                "\"itemId\": 123" +
+                "}" +
+                "]" +
+                "}";
 
         ItemDto dto = objectMapper.readValue(json, ItemDto.class);
 
@@ -112,13 +111,7 @@ public class ItemDtoTest {
 
     @Test
     void shouldDeserializeMinimalItemDto() throws Exception {
-        String json = """
-                {
-                    "name": "Молоток",
-                    "description": "Простой молоток",
-                    "available": true
-                }
-                """;
+        String json = "{\"name\": \"Молоток\", \"description\": \"Простой молоток\", \"available\": true}";
 
         ItemDto dto = objectMapper.readValue(json, ItemDto.class);
 
@@ -134,14 +127,7 @@ public class ItemDtoTest {
 
     @Test
     void shouldHandleNullCollections() throws Exception {
-        String json = """
-                {
-                    "name": "Отвертка",
-                    "description": "Крестовая отвертка",
-                    "available": true,
-                    "comments": null
-                }
-                """;
+        String json = "{\"name\": \"Отвертка\", \"description\": \"Крестовая отвертка\", \"available\": true, \"comments\": null}";
 
         ItemDto dto = objectMapper.readValue(json, ItemDto.class);
 
@@ -151,15 +137,7 @@ public class ItemDtoTest {
 
     @Test
     void shouldHandleEmptyCollections() throws Exception {
-        String json = """
-                {
-                    "name": "Пила",
-                    "description": "Ручная пила",
-                    "available": false,
-                    "comments": []
-                }
-                """;
-
+        String json = "{\"name\": \"Пила\", \"description\": \"Ручная пила\", \"available\": false, \"comments\": []}";
         ItemDto dto = objectMapper.readValue(json, ItemDto.class);
 
         assertThat(dto.getName()).isEqualTo("Пила");

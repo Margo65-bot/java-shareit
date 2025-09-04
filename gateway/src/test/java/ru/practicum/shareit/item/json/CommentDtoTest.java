@@ -38,14 +38,7 @@ public class CommentDtoTest {
 
     @Test
     void shouldDeserializeCommentDto() throws Exception {
-        String json = """
-                {"id": 1,
-                "text": "Отличная вещь! Очень доволен покупкой.",
-                "authorName": "Иван Иванов",
-                "created": "2024-01-15T10:30:45",
-                "itemId": 123
-                }
-                """;
+        String json = "{\"id\": 1, \"text\": \"Отличная вещь! Очень доволен покупкой.\", \"authorName\": \"Иван Иванов\", \"created\": \"2024-01-15T10:30:45\", \"itemId\": 123}";
 
         CommentDto dto = objectMapper.readValue(json, CommentDto.class);
 
@@ -58,13 +51,7 @@ public class CommentDtoTest {
 
     @Test
     void shouldHandleNullValues() throws Exception {
-        String json = """
-                {"text": "Комментарий",
-                "authorName": null,
-                "created": null,
-                "itemId": 123
-                }
-                """;
+        String json = "{\"text\": \"Комментарий\",\"authorName\": null,\"created\": null,\"itemId\": 123}";
 
         CommentDto dto = objectMapper.readValue(json, CommentDto.class);
 

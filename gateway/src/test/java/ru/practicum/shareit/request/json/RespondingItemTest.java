@@ -31,11 +31,7 @@ public class RespondingItemTest {
 
     @Test
     void shouldDeserializeRespondingItem() throws Exception {
-        String json = """
-                {"id": 1,
-                "name": "Дрель",
-                "userId": 123 }
-                """;
+        String json = "{\"id\": 1, \"name\": \"Дрель\", \"userId\": 123}";
 
         RespondingItem item = objectMapper.readValue(json, RespondingItem.class);
 
@@ -46,11 +42,7 @@ public class RespondingItemTest {
 
     @Test
     void shouldDeserializeWithNullValues() throws Exception {
-        String json = """
-                {"id": 1,
-                "name": null,
-                "userId": null}
-                """;
+        String json = "{\"id\": 1, \"name\": null, \"userId\": null}";
 
         RespondingItem item = objectMapper.readValue(json, RespondingItem.class);
 
