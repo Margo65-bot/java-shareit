@@ -41,6 +41,7 @@ public class HttpClient {
         HttpEntity<Object> request = new HttpEntity<>(object, headers);
         return restTemplate.exchange(endPoint, HttpMethod.POST, request, Object.class);
     }
+
     public ResponseEntity<Object> patch(String endPoint, Long userId, Object object) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
