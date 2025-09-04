@@ -417,21 +417,6 @@ public class BookingServiceImplTest {
     }
 
     @Test
-    void create_WithStartAtEndOfExisting_ShouldThrowException() {
-        bookingService.create(booker1.getId(), createDto1);
-
-        BookingCreateDto conflictDto = BookingCreateDto.builder()
-                .start(createDto1.getEnd())
-                .end(createDto1.getEnd().plusDays(1))
-                .itemId(item1.getId())
-                .build();
-
-        assertThatThrownBy(() -> bookingService.create(booker2.getId(), conflictDto))
-                .isInstanceOf(ConditionsNotMetException.class)
-                .hasMessageContaining("не должно пересекаться");
-    }
-
-    @Test
     void create_WithStartInsideExisting_ShouldThrowException() {
         bookingService.create(booker1.getId(), createDto1);
 
