@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
                 .stream().filter(user -> user.getId() != id)
                 .toList();
 
-        if (!usersWithSameEmail.isEmpty() ) {
+        if (!usersWithSameEmail.isEmpty()) {
             throw new UserEmailConflictException("Пользователь с электронной почтой " + email + " уже существует");
         }
 
