@@ -39,12 +39,11 @@ public class CommentDtoTest {
     @Test
     void shouldDeserializeCommentDto() throws Exception {
         String json = """
-                {
-                    "id": 1,
-                    "text": "Отличная вещь! Очень доволен покупкой.",
-                    "authorName": "Иван Иванов",
-                    "created": "2024-01-15T10:30:45",
-                    "itemId": 123
+                {"id": 1,
+                "text": "Отличная вещь! Очень доволен покупкой.",
+                "authorName": "Иван Иванов",
+                "created": "2024-01-15T10:30:45",
+                "itemId": 123
                 }
                 """;
 
@@ -60,11 +59,10 @@ public class CommentDtoTest {
     @Test
     void shouldHandleNullValues() throws Exception {
         String json = """
-                {
-                    "text": "Комментарий",
-                    "authorName": null,
-                    "created": null,
-                    "itemId": 123
+                {"text": "Комментарий",
+                "authorName": null,
+                "created": null,
+                "itemId": 123
                 }
                 """;
 

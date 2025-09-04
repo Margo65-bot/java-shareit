@@ -32,11 +32,9 @@ public class UserDtoTest {
     @Test
     void shouldDeserializeUserDto() throws Exception {
         String json = """
-                {
-                    "id": 1,
+                {"id": 1,
                     "name": "Иван Иванов",
-                    "email": "ivan@example.com"
-                }
+                    "email": "ivan@example.com"}
                 """;
 
         UserDto dto = objectMapper.readValue(json, UserDto.class);
@@ -49,11 +47,9 @@ public class UserDtoTest {
     @Test
     void shouldDeserializeWithNullValues() throws Exception {
         String json = """
-                {
-                    "id": 1,
+                {"id": 1,
                     "name": null,
-                    "email": null
-                }
+                    "email": null}
                 """;
 
         UserDto dto = objectMapper.readValue(json, UserDto.class);

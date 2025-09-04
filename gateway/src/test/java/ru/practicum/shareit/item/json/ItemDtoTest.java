@@ -64,8 +64,7 @@ public class ItemDtoTest {
     @Test
     void shouldDeserializeItemDto() throws Exception {
         String json = """
-                {
-                    "id": 123,
+                { "id": 123,
                     "name": "Дрель",
                     "description": "Мощная дрель с ударным механизмом",
                     "available": true,
